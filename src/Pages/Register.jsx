@@ -1,0 +1,92 @@
+import React from 'react'
+import styled from 'styled-components'
+
+
+const Container = styled.div`
+    background:url("https://png.pngtree.com/background/20220722/original/pngtree-photo-of-shelf-commodity-supermarket-picture-image_1711939.jpg");
+    background-size: cover;
+    height:100vh;
+    display:flex;
+    align-items:center;justify-content:center;
+`
+const Wrapper = styled.div`
+    background-color:rgba(256,256,256,0.9);
+    padding:10px;
+    width:500px;
+    display:flex;
+    border-radius:20px;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+`
+const Title = styled.h1`
+
+
+
+`
+const Form = styled.form`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify:content:center;
+`
+const Input = styled.input`
+    width:300px;
+    height:25px;
+    border:1px solid grey;
+    border-radius:5px;
+    padding:5px;
+    margin-top:10px;
+    font-size:20px;
+`
+const Agreement=styled.span`
+    width:auto;
+    margin:10px;
+`
+const Button = styled.button`
+    font-size:18px;
+    width:150px;
+    height:40px;
+    padding:5px;
+    background-color:white;
+    border:2px solid grey;
+    border-radius:20px;
+    margin:10px;
+    cursor:pointer;
+    &:hover{
+        background-color:lightgrey
+    }
+`
+const Link=styled.span`
+
+color:blue;
+cursor:pointer;
+`
+const Register = () => {
+  return (
+    <Container>
+        <Wrapper>
+            <Title>
+                Create Account
+            </Title>
+            <Form>
+                <Input placeholder="First Name"/>
+                <Input placeholder="Last Name"/>
+                <Input placeholder="Username"/>
+                <Input placeholder="E-mail"/>
+                <Input placeholder="Password"/>
+                <Input placeholder="Confirm Password"/>
+                <Agreement>
+                    By clicking on Create account you automatically agree to the following terms and conditions mentioned in the Privacy Policy. <Link>Terms and Conditions</Link>
+                </Agreement>
+                <Button>Create Account</Button>
+                <Agreement>Have an Account ? <Link>Sign in</Link></Agreement>
+            </Form>
+        </Wrapper>
+    </Container>    
+  )
+}
+
+export default Register
