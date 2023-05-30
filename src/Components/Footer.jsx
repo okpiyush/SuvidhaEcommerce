@@ -89,6 +89,9 @@ width:400px;
 height:50px;
 
 `
+const A=styled.a`
+text-decoration:none;
+`
 const Footer = () => {
   return (
     <Wrapper>
@@ -138,7 +141,7 @@ const Footer = () => {
                 Contact us
             </Title>
             <ContactItem>
-            <MapIcon></MapIcon>XYZ road, Deoghar, Jharkhand, Pin :814112 
+            <MapIcon></MapIcon><A href="https://goo.gl/maps/BhR8gT7zRdjhXLRg8" target="_blank">XYZ road, Deoghar, Jharkhand, Pin :814112 </A>
             </ContactItem>
             <ContactItem>
                 <PhoneIcon/>+91 XXX-XXX-4577

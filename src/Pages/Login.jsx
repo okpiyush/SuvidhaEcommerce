@@ -1,5 +1,11 @@
 import styled from 'styled-components'
-
+import { useState } from 'react'
+import { useContext } from 'react'
+import { LoginContext } from '../Contexts/LoginContext'
+import { useNavigate } from 'react-router-dom'
+import  axios  from 'axios'
+import { useEffect } from 'react'
+import { useDebugValue } from 'react'
 const Container = styled.div`
     background:url("https://png.pngtree.com/background/20220722/original/pngtree-photo-of-shelf-commodity-supermarket-picture-image_1711939.jpg");
     background-size: cover;
@@ -57,12 +63,55 @@ const Button = styled.button`
         background-color:lightgrey
     }
 `
-const Link=styled.span`
+const Link=styled.a`
 
 color:blue;
+text-decoration:none;
 cursor:pointer;
 `
 const Login = () => {
+    const { handleLogin,loginData } = useContext(LoginContext);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate=useNavigate();
+
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if(username===""||password===""){
+        alert("Please enter Username and Password");
+        return;
+      }
+      const userData = {
+        "username" :username,
+        "password" :password
+      };
+
+      try{
+        const response = await axios.post('http://localhost:5001/api/auth/login', userData);
+        // Handle the response as needed
+            console.log(response.data);
+    
+        handleLogin(response.data);
+        navigate("/home", { replace: true });
+        checkUser();
+      }catch(err){
+        console.log(err);
+      }
+    };
+
+  const handleUserChange=(e)=>{
+    setUsername(e.target.value);
+  }
+  const handlePasswordChange=(e)=>{
+    setPassword(e.target.value);
+  }
+  const checkUser=()=>{
+    if(loginData){
+      navigate("/home",{replace:true});
+    }
+  }
+  
   return (
     <Container>
         <Wrapper>
@@ -70,12 +119,12 @@ const Login = () => {
                 Sign in
             </Title>
             <Form>
-                <Input placeholder="Username"/>
+                <Input onChange={handleUserChange} placeholder="Username"/>
                 
-                <Input placeholder="Password"/>
-                <Button>Sign in </Button>
-                <Agreement>Forgot your Password? <Link> Forgot Password </Link></Agreement>
-                <Agreement>Don't have an account ? <Link>Create account</Link></Agreement>
+                <Input type="password"onChange={handlePasswordChange}placeholder="Password"/>
+                <Button onClick={handleSubmit} >Sign in </Button>
+                <Agreement>Forgot your Password? <Link href="/forgotpassword"> Forgot Password </Link></Agreement>
+                <Agreement>Don't have an account ? <Link href="/register">Create account</Link></Agreement>
             </Form>
         </Wrapper>
     </Container>

@@ -1,10 +1,11 @@
 import { white } from "material-ui/styles/colors"
 import styled from "styled-components"
-import Announcement from "../Components/Announcement"
-import CartProduct from "../Components/CartProduct"
-import Footer from "../Components/Footer"
-import Navbar from "../Components/Navbar"
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { useContext, useEffect,useState } from "react"
+import { LoginContext } from "../Contexts/LoginContext"
+import axios from "axios"
+import Loading from "../Components/Loader/Loading"
+import CartProduct from "../Components/CartProduct/CartProduct";
 
 const Container= styled.div``
 const Wrapper= styled.div`
@@ -51,44 +52,6 @@ const Bottom=styled.div`
 const  Info=styled.div`
     flex:3;
 `
-const Product = styled.div`
-padding:5px;
-display:flex;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
-margin-bottom:10px; 
-border-radius:10px;
-
- `
-const ProductDetail = styled.div`
-   display:flex;
-   flex:2;
-   `
-const Image = styled.img`
-height:200px;
-width:200px;
-flex:1;
-`
-const Details = styled.div`
-flex:2;
-margin-left:40px;
-font-size:20px;
-display:flex; 
-flex-direction:column;
-justify-content:space-around;
-padding:10px;
-`
-const ProductName = styled.span`
-`
-const ProductId = styled.span``
-const ProductWeight = styled.span``
-const PriceDetail=styled.div`
-flex:1;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:space-around;
-
-`
 
 const TopTexts=styled.div`
     display:flex;
@@ -113,40 +76,6 @@ border-radius:10px;
 padding:10px;
 `
 
-const TypeContainer=styled.div`
-display:flex;
-
-align-items:center;
-justify-content:center;
-`
-const Button=styled.button`
-    font-size:30px;
-    width:30px;
-    height:30px;
-    display:flex;
-    border:1px solid lightgrey;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background-color:white;
-    margin:10px;
-    cursor:pointer;
-    
-`
-const Qty=styled.input`
-    font-size:25px;
-    width:35px;
-    height:30px;
-    display:flex;
-    border:2px solid teal;
-    border-radius:15%;
-    align-items:center;
-    justify-content:center;
-`
-const Price= styled.span`
-font-size :30px;
-font-weight:600;
-`
 const CouponCode=styled.div`
 margin:20px;
 display:flex;
@@ -213,11 +142,75 @@ const SummaryType=styled.div`
 
 
 const Cart = () => {
+    const {loginData}=useContext(LoginContext);
+    const [cart,setCart]=useState(null);
+    const [productQuantity, setProductQuantity] = useState();
+    const [Delivery,setDelivery]=useState(100);
+    const [totalPrice,setTotalPrice]=useState(0);
+
+
+    useEffect(() => {
+        const makeRequest = async () => {
+            if (loginData && loginData.accessToken) { // Add null check here
+                const headers = {
+                  token: `Bearer ${loginData.accessToken}`,
+                };
+          
+            try {
+              const response = await axios.get(`http://localhost:5001/api/cart/find/${loginData._id}`, { headers });
+              console.log(response.data.products)
+              setCart(response.data.products)
+              console.log(cart);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+        }
+        makeRequest();
+    }, [loginData]);
+    useEffect(()=>{
+
+    },[totalPrice])
+
+    //we will now be fetching specific products and making it an array so as to use it in for calculation of total price 
+     
+
+    // updating quantity at the fropnt and backend
+    const updateQuantity = (productId, newQuantity,price) => {
+        // Update the quantity of the product in the cart
+        const updatedCart = cart.map((item) => {
+          if (item.productId === productId && newQuantity!=0) {
+            if(newQuantity>item.quantity){
+                let val=totalPrice+price
+                setTotalPrice(val);
+            }else{
+                let val=totalPrice-price;
+                setTotalPrice(val);
+            }
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        });
+        setCart(updatedCart);
+    
+        //updating the quantity in the backend
+
+      };
+      const setInitial=(price,quantity)=>{
+        setTotalPrice(totalPrice+price*quantity);
+      }
   return (
     <Container>
-        <Navbar/>
-        <Announcement/>
-        <Wrapper>
+    {
+        cart===null?
+
+        (
+
+        <Loading/>
+        )
+        :
+        (
+            <Wrapper>
             <Title> Your Bag</Title>
             <Top>
                 <TopButton>CONTINUE SHOPPING</TopButton>
@@ -231,66 +224,9 @@ const Cart = () => {
             <Bottom>
                 {/*the products itself*/}
                 <Info>
-                    <Product>
-                        <ProductDetail>
-                            <Image src="https://www.modernfoods.co.in/wp-content/uploads/2021/02/cremeburst-berrypunch-product-category-newfinal.png"/>
-                            <Details>
-                                <ProductName>
-                                    <b>Product :</b> Modern Cremeburst Cupcake
-                                </ProductName>
-                                <ProductId>
-                                    <b>ID :</b>
-                                    <span>123456789</span>
-                                </ProductId>
-                                <ProductWeight>
-                                    <b>Weight </b>: 50gm
-                                </ProductWeight>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                                <TypeContainer>
-                                    <Button>
-                                    -
-                                    </Button>
-                                    <Qty max="99" placeholder='1' active />
-                                    <Button>
-                                        +
-                                    </Button>
-
-                                </TypeContainer>
-                                <Price>₹ 800</Price>
-                        </PriceDetail>
-                    </Product>
-                    <Product>
-                        <ProductDetail>
-                            <Image src="https://www.modernfoods.co.in/wp-content/uploads/2021/02/cremeburst-berrypunch-product-category-newfinal.png"/>
-                            <Details>
-                                <ProductName>
-                                <b>Product :</b> Modern Cremeburst
-                                </ProductName>
-                                <ProductId>
-                                    <b>ID :</b>
-                                    <span>123456789</span>
-                                </ProductId>
-                                <ProductWeight>
-                                    <b>Weight </b>: 50gm
-                                </ProductWeight>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                                <TypeContainer>
-                                    <Button>
-                                    -
-                                    </Button>
-                                    <Qty max="99" placeholder='1' active />
-                                    <Button>
-                                        +
-                                    </Button>
-
-                                </TypeContainer>
-                                <Price>₹ 800</Price>
-                        </PriceDetail>
-                    </Product>
+                    {cart.map((item,key)=>{
+                        return <CartProduct product={item} key={key} updateQuantity={updateQuantity} updateTotal={setInitial}  />
+                    })}
                 </Info>
                 {/*summary and coupon code */}
                 <InfoTab>
@@ -300,11 +236,11 @@ const Cart = () => {
                     </Title>
                     <SummaryType>
                         <SummaryName>Total Value</SummaryName>
-                        <SummaryValue>+ ₹ 1600</SummaryValue>
+                        <SummaryValue>+ ₹ {totalPrice}</SummaryValue>
                     </SummaryType>
                     <SummaryType>
                         <SummaryName>Delivery Charges</SummaryName>
-                        <SummaryValue>+ ₹ 300</SummaryValue>
+                        <SummaryValue>+ ₹{Delivery}</SummaryValue>
                     </SummaryType>
                     <SummaryType>
                         <SummaryName>Coupon Discount</SummaryName>
@@ -325,9 +261,14 @@ const Cart = () => {
                 </CouponCode>
                 </InfoTab>
             </Bottom>
-        </Wrapper>
-        <Footer/>
+            
+            </Wrapper>
+        )
+            }
+        
+
     </Container>
+    
   )
 }
 

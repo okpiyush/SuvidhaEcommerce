@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
+import { LoginContextProvider } from "./Contexts/LoginContext";
 ReactDOM.render(
-  <React.StrictMode>
+   <LoginContextProvider>
     <App />
-  </React.StrictMode>,
+  </LoginContextProvider>,
   document.getElementById('root')
 );

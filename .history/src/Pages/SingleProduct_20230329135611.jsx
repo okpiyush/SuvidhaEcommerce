@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Navbar from "../Components/Navbar"
-import Announcement from "../Components/Announcement/Announcement"
+import Announcement from "../Components/Announcement"
 import Discountsubs from "../Components/Discountsubs"
 import Footer from "../Components/Footer"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -88,7 +88,7 @@ const Button=styled.button`
     cursor:pointer;
     
 `
-const Qty=styled.div`
+const Qty=styled.input`
     font-size:25px;
     width:35px;
     height:30px;
@@ -150,12 +150,14 @@ const Reviewer=styled.div`
     font-weight:600;
 `
 const SingleProduct = () => {
-    let val=0;
+    this.state={qty:0};
     return (
     <Container>
+        <Navbar/>
+        <Announcement/>
         <Wrapper>
             <ImgContainer>
-                <Image src="https://www.aashirvaad.com/img/nsfo/Atta.png"/>
+                <Image src="https://www.aashirvaad.com/img/nsfo/Atta.png"></Image>
             </ImgContainer>
             <More>
             <InfoContainer>
@@ -187,7 +189,7 @@ const SingleProduct = () => {
                 <Button>
                 -
                 </Button>
-                <Qty>{val}</Qty>
+                <Qty max="99" active/>
                 <Button>
                     +
                 </Button>
@@ -203,19 +205,22 @@ const SingleProduct = () => {
                 <RevTitle>Reviews</RevTitle>
                 <Reviews>
                     <Review>
-                        <RevBody>Amazing Company and Low Price</RevBody>
-                        <Reviewer>-Kunal</Reviewer>
+                        <RevBody>Отличная компания для покупки товаров для повседневного использования</RevBody>
+                        <Reviewer>-Vladimir Putin</Reviewer>
                     </Review>
                     <Review>
-                        <RevBody>Good Product</RevBody>
-                        <Reviewer>-Ravi</Reviewer>
+                        <RevBody>The value of this newly budding company is still better than some countries</RevBody>
+                        <Reviewer>-Desh ka beta</Reviewer>
                     </Review>
                 </Reviews>
             </ReviewContainer>
             </More>
             
         </Wrapper>
+        
+        
         <Discountsubs/>
+        <Footer/>
     </Container>
   )
 }
