@@ -145,7 +145,7 @@ const Register = () => {
                     By clicking on Create account you automatically agree to the following terms and conditions mentioned in the Privacy Policy. <Link>Terms and Conditions</Link>
                 </Agreement>
                 <Button type="submit">Create Account</Button>
-                <Agreement>Have an Account ? <Link href="/login">Sign in</Link></Agreement>
+                <Agreement>Have an Account ? <Link onClick={()=>{navigate("/login")}}>Sign in</Link></Agreement>
             </Form>
         </Wrapper>
     </Container>    

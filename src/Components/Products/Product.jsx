@@ -122,7 +122,7 @@ const saveInput= async (item)=>{
         <Icon>
           <AddShoppingCartIcon onClick={()=>{AddToPaper(item._id)}}></AddShoppingCartIcon>
         </Icon>
-        <Icon href={`/product/${item._id}`}>
+        <Icon onClick={()=>{nav(`/product/${item._id}`)}}>
           <SearchIcon></SearchIcon>
         </Icon>
         {!post?

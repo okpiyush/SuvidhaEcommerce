@@ -120,8 +120,8 @@ const Login = () => {
                 
                 <Input type="password"onChange={handlePasswordChange}placeholder="Password"/>
                 <Button onClick={handleSubmit} >Sign in </Button>
-                <Agreement>Forgot your Password? <Link href="/forgotpassword"> Forgot Password </Link></Agreement>
-                <Agreement>Don't have an account ? <Link href="/register">Create account</Link></Agreement>
+                <Agreement>Forgot your Password? <Link onClick={()=>{navigate("/forgotpassword")}}> Forgot Password </Link></Agreement>
+                <Agreement>Don't have an account ? <Link onClick={()=>{navigate("/register")}}>Create account</Link></Agreement>
             </Form>
         </Wrapper>
     </Container>

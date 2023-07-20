@@ -6,6 +6,7 @@ import { useState } from "react";
 import Loading from "./Loader/Loading";
 import useGetAxios from "../Hooks/useGetAxios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Container= styled.div`
 width:100%;
 height:100vh;
@@ -91,6 +92,7 @@ const Slider = () => {
     const [slideIndex,setSlideIndex]=useState(0);
     const [loading,setLoading]=useState(true);
     const [sliderItems,setSliderItems]=useState([]);
+    const nav= useNavigate();
     const wow=useGetAxios("https://businessmanagementsolutionapi.onrender.com/api/slideshow/");
     console.log(wow);
     
@@ -136,7 +138,7 @@ const Slider = () => {
                     <Infocontainer>
                         <Title>{props.title}</Title>
                         <Description> {props.desc}</Description>
-                        <Button href={props.link}> Shop Now</Button>
+                        <Button onClick={()=>{nav(`${props.link}`)}}> Shop Now</Button>
                     </Infocontainer>
                 </Slide>
             ))}
