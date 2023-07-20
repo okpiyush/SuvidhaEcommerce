@@ -91,7 +91,7 @@ const Slider = () => {
     const [slideIndex,setSlideIndex]=useState(0);
     const [loading,setLoading]=useState(true);
     const [sliderItems,setSliderItems]=useState([]);
-    const wow=useGetAxios("http://localhost:5001/api/slideshow/");
+    const wow=useGetAxios("https://businessmanagementsolutionapi.onrender.com/api/slideshow/");
     console.log(wow);
     
     //handle the mounting of the wow component

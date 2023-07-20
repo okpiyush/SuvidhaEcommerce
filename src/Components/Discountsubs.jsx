@@ -63,7 +63,7 @@ const Discountsubs = () => {
         console.log(Mail);
         if(Mail===undefined)return
         setLoading(true);
-      const response = await axios.post(`http://localhost:5001/api/mail/`,{
+      const response = await axios.post(`https://businessmanagementsolutionapi.onrender.com/api/mail/`,{
         "email":Mail
       },
       );

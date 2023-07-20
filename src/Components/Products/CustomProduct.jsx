@@ -36,7 +36,7 @@ const CustomProduct = (props) => {
     const headers = {
       token: `Bearer ${loginData.accessToken}`,
     };
-    const url = 'http://localhost:5001/api/wishlist/delete';
+    const url = 'https://businessmanagementsolutionapi.onrender.com/api/wishlist/delete';
     const response = await axios.patch(url, data, { headers });
     console.log(response);
 

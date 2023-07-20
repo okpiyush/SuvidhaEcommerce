@@ -156,7 +156,7 @@ const SingleProduct = () => {
     const [num,setNum]=useState(0);
     const {id}= useParams(); //use parameter hook
     console.log(id);
-    const url =`http://localhost:5001/api/products/find/${id}`;
+    const url =`https://businessmanagementsolutionapi.onrender.com/api/products/find/${id}`;
     const data=useGetAxios(url);
     console.log(data);
     

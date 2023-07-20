@@ -84,7 +84,7 @@ const [Delivery,setDelivery]=useState(100);
   useEffect(() => {
     const makeRequest = async () => {
       try {
-        const productInfo = await axios.get(`http://localhost:5001/api/products/find/${props.product.productId}`);
+        const productInfo = await axios.get(`https://businessmanagementsolutionapi.onrender.com/api/products/find/${props.product.productId}`);
         setProduct(productInfo.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (error) {

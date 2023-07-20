@@ -4,8 +4,6 @@ import { useContext } from 'react'
 import { LoginContext } from '../Contexts/LoginContext'
 import { useNavigate } from 'react-router-dom'
 import  axios  from 'axios'
-import { useEffect } from 'react'
-import { useDebugValue } from 'react'
 const Container = styled.div`
     background:url("https://png.pngtree.com/background/20220722/original/pngtree-photo-of-shelf-commodity-supermarket-picture-image_1711939.jpg");
     background-size: cover;
@@ -98,7 +96,7 @@ const Login = () => {
       };
 
       try{
-        const response = await axios.post('http://localhost:5001/api/auth/login', userData);
+        const response = await axios.post('https://businessmanagementsolutionapi.onrender.com/api/auth/login', userData);
         // Handle the response as needed
             console.log(response.data);
     

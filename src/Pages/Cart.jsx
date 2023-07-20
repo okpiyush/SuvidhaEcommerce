@@ -143,6 +143,7 @@ const SummaryType=styled.div`
 
 const Cart = () => {
     const {loginData,cart,setCart}=useContext(LoginContext);
+    const [productQuantity, setProductQuantity] = useState();
     const [Delivery,setDelivery]=useState(100);
     const [totalPrice,setTotalPrice]=useState(0);
 
@@ -157,7 +158,7 @@ const Cart = () => {
           
             try {
             console.log(headers.token);
-              const response = await axios.get(`http://localhost:5001/api/cart/find/${loginData._id}`, { headers });
+              const response = await axios.get(`https://businessmanagementsolutionapi.onrender.com/api/cart/find/${loginData._id}`, { headers });
               console.log(response.data.products)
               setCart(response.data.products)
             } catch (error) {
@@ -199,10 +200,8 @@ const Cart = () => {
       useEffect(() => {
         const updateCart = async () => {
           try {
-            const headers={
-                token:`Bearer ${loginData.accessToken}`
-            }
-            const response = await axios.get(`http://localhost:5001/api/cart/find`,{headers} ); // Replace with your API endpoint
+            const id = loginData._id;
+            const response = await axios.put(`https://businessmanagementsolutionapi.onrender.com/api/cart/${id}`, cart); // Replace with your API endpoint
             console.log(response.data); //Log the response data
           } catch (error) {
             console.error(error);
@@ -237,15 +236,15 @@ const Cart = () => {
                 {/*the products itself*/}
                 <Info>
                     {
-                        cart.length!==0?
+                        cart.length?
                         cart.map((item,key)=>{
                         return <CartProduct product={item} key={key} updateQuantity={updateQuantity} updateTotal={setInitial}  />
                         })
                         :
                         (
-                            <center>
+                            <enter>
                                 No Items in your bag!
-                            </center>
+                            </enter>
                         )
                     }
                 </Info>

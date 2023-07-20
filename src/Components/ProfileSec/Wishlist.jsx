@@ -9,7 +9,7 @@ const Wishlist = () => {
   const [wishlist,setWishList]=useState(null);
   const [loading,setLoading]=useState(true);
   const{loginData}=useContext(LoginContext);
-  const url="http://localhost:5001/api/wishlist/get";
+  const url="https://businessmanagementsolutionapi.onrender.com/api/wishlist/get";
   const headers={
     "token":`Bearer ${loginData.accessToken}`
   }

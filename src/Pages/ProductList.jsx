@@ -1,19 +1,12 @@
 import styled from "styled-components"
-import Announcement from "../Components/Announcement/Announcement"
-import Navbar from "../Components/Navbar"
 import Products from "../Components/Products/Products"
 import Discountsubs from "../Components/Discountsubs"
-import Footer from "../Components/Footer"
 const Container=styled.div`
 
 `
 const FilterContainer=styled.div`
 display: flex;
 justify-content:space-between;
-`
-
-const Title=styled.h1`
-margin:20px;
 `
 const Filter=styled.div
 `

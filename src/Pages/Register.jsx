@@ -98,13 +98,13 @@ const Register = () => {
         }
 
         try{
-            const response = await axios.post("http://localhost:5001/api/auth/register",registeruser);
+            const response = await axios.post("https://businessmanagementsolutionapi.onrender.com/api/auth/register",registeruser);
             //Once you are register you have to login 
             const userData = {
                 "username" :response.data.username,
                 "password" :Password
             };
-            const response1 = await axios.post('http://localhost:5001/api/auth/login', userData);
+            const response1 = await axios.post('https://businessmanagementsolutionapi.onrender.com/api/auth/login', userData);
             handleLogin(response1.data);
             navigate("/home", { replace: true });
         }catch(err){

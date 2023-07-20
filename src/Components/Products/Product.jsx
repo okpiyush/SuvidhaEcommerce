@@ -86,7 +86,7 @@ const Product =({item,post,notpaper}) => {
       const headers={
         token:`Bearer ${loginData.accessToken}`
       }
-      const url="http://localhost:5001/api/wishlist/"
+      const url="https://businessmanagementsolutionapi.onrender.com/api/wishlist/"
       await axios.patch(url,data,{headers}).then(()=>{
         alert("product added");
       });
@@ -109,7 +109,7 @@ const saveInput= async (item)=>{
   const headers={
     token:`Bearer ${loginData.accessToken}`
   }
-  const url="http://localhost:5001/api/cart/add"
+  const url="https://businessmanagementsolutionapi.onrender.com/api/cart/add"
   await axios.put(url,data,{headers}).then(()=>{
     alert("product added to cart");
   });

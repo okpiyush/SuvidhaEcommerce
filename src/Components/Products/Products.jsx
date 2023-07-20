@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 `
 
 const Products = () => {
-  const url="http://localhost:5001/api/products/?featured=true"
+  const url="https://businessmanagementsolutionapi.onrender.com/api/products/?featured=true"
   const getData=useGetAxios(url);
   const products = !getData?null:getData;
   

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -43,10 +42,7 @@ const Input = styled.input`
     margin-top:10px;
     font-size:20px;
 `
-const Agreement=styled.span`
-    width:auto;
-    margin:10px;
-`
+
 const Button = styled.button`
     font-size:18px;
     width:150px;
@@ -61,12 +57,7 @@ const Button = styled.button`
         background-color:lightgrey
     }
 `
-const Link=styled.a`
 
-color:blue;
-text-decoration:none;
-cursor:pointer;
-`
 const ForgotPassword = () => {
     const [stat,setStat]=useState(1);
     const [email,setEmail]=useState();
@@ -79,7 +70,7 @@ const ForgotPassword = () => {
             const payload={
                 "email":e.target.email.value
             }
-            const url="http://localhost:5001/api/auth/forgotpassword"
+            const url="https://businessmanagementsolutionapi.onrender.com/api/auth/forgotpassword"
             try{
                 const res=await axios.post(url,payload);
                 setEmail(e.target.email.value);
@@ -104,7 +95,7 @@ const ForgotPassword = () => {
             email:email,
             otp:e.target.otp.value
         }
-        const url="http://localhost:5001/api/auth/setotp"
+        const url="https://businessmanagementsolutionapi.onrender.com/api/auth/setotp"
         try{
             const res=await axios.post(url,payload);
             alert("Check your email for the new password")

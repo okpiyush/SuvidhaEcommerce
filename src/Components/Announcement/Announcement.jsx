@@ -18,7 +18,7 @@ const Container = styled.div`
 
 
 const Announcement= () => {
-  const url = "http://localhost:5001/api/announcement/";
+  const url = "https://businessmanagementsolutionapi.onrender.com/api/announcement/";
   const temp = useGetAxios(url);
   //checking so that temp.data is not null
   const announcements = !temp?null:temp.data;
