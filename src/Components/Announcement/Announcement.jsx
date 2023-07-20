@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useState } from "react"
 import axios from 'axios'
 import Loading from "../Loader/Loading"
+import useGetAxios from "../../Hooks/useGetAxios"
 const Container = styled.div`
     height:30px;
     background-color:black;
@@ -16,38 +17,27 @@ const Container = styled.div`
 `
 
 
-const Announcement = () => {
-  const [annos,setAnnos]=useState(null);
-  useEffect(()=>{
-    const makeRequest=async()=>{
-      try {
-        const response = await axios.get(`http://localhost:5001/api/announcement/`);
-        console.log(response.data.data);
-        setAnnos(response.data.data);
-      }catch(err){
-        console.log(err)
-      }
-      
-    }
-    if (!annos) {
-      makeRequest();
-    }
-    },[]);
+const Announcement= () => {
+  const url = "http://localhost:5001/api/announcement/";
+  const temp = useGetAxios(url);
+  //checking so that temp.data is not null
+  const announcements = !temp?null:temp.data;
+
   return (
     <Container>
-        {
-          !annos ?(<Loading/>):(
-            <div id="scroll-container">
-              <div id="scroll-text">
-              {annos.map((item,key)=>(
-                    <div id="inner" key={key}>  {item} </div>
-              ))}
+      <div id="scroll-container">
+        <div id="scroll-text">
+        {!announcements?
+        (<Loading />):
+        (
+          announcements.map((item, key) => (
+          <div id="inner" key={key}>{item}</div>
+          ))
+        )}
         </div>
-            </div>
-          )
-        }
+      </div>
     </Container>
-  )
-}
+  );
+};
 
 export default Announcement;

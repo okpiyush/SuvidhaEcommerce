@@ -5,9 +5,7 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { useNavigate } from 'react-router-dom';
-
-import { searchData } from '../data';
+import HeadsetMicIcon from '@mui/icons-material/HeadsetMic';
 import { LoginContext } from '../Contexts/LoginContext';
 const Container = styled.div`
     height:50px;
@@ -60,10 +58,7 @@ const SearchContainer = styled.div`
 const Logo = styled.h1`
     font-weight: bold;
 `
-const A=styled.a`
-    color:black;
-    text-decoration:none;
-`
+
 const Navbar = () => {
     const {loginData,handleLogout}=useContext(LoginContext);
     const [showLogout, setShowLogout] = useState(false);
@@ -71,6 +66,7 @@ const Navbar = () => {
       setShowLogout(!showLogout);
     };
 const A=styled.a`
+color:black;
 text-decoration:none;
 `
   return (
@@ -79,7 +75,7 @@ text-decoration:none;
             <Left>
                 <Language>EN</Language>
                 <SearchContainer>
-                   <ReactSearchBox data= {searchData} placeholder="Search" inputHeight="30px"></ReactSearchBox>
+                   <ReactSearchBox placeholder="Search" inputHeight="30px"></ReactSearchBox>
                    <SearchOutlinedIcon></SearchOutlinedIcon>
                 </SearchContainer>
                 
@@ -102,12 +98,12 @@ text-decoration:none;
                     {showLogout &&  <MenuItem onClick={toggleLogout}><A href="/profile">Profile</A></MenuItem> }
                     {showLogout&&<MenuItem onClick={handleLogout}>Logout</MenuItem>}
                     <MenuItem>
-            <Badge badgeContent={4} color="primary">
-                <NotificationsNoneOutlinedIcon></NotificationsNoneOutlinedIcon>
+            <Badge style={{cursor:'pointer'}} color="primary">
+                <A href="/chat"><HeadsetMicIcon></HeadsetMicIcon></A>
             </Badge>
             </MenuItem>
             <MenuItem>
-            <Badge badgeContent={4} color="primary">
+            <Badge style={{cursor:'pointer'}} color="primary">
                 <A href="/cart"><ShoppingCartOutlinedIcon></ShoppingCartOutlinedIcon></A>
             </Badge>
             </MenuItem>

@@ -10,6 +10,7 @@ import Announcement from "./Components/Announcement/Announcement";
 import Footer from "./Components/Footer";
 import ForgotPassword from "./Pages/ForgotPassword"
 import Profile from "./Pages/Profile/Profile";
+import Chat from "./Pages/Chat/Chat";
 
 const App = () => {
   return(
@@ -21,11 +22,11 @@ const App = () => {
           <Route path="/">
             <Route index element={<Home />} />
             <Route path="products" element={<ProductList />} />
-            <Route path="product" element={<SingleProduct />} />
+            <Route path="product/:id" element={<SingleProduct />} />
             <Route path="login" element={<Login />} />
             <Route path="cart" element={<Cart />} />
             <Route path="register" element={<Register />} />
-            {/* <Route path="tnc" element={<Terms />} /> */}
+            <Route path="chat" element={<Chat/>} />
             <Route path="forgotpassword" element={<ForgotPassword />} />
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/profile" element={<Profile/>}/>

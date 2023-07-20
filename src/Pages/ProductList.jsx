@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import Announcement from "../Components/Announcement/Announcement"
 import Navbar from "../Components/Navbar"
-import Products from "../Components/Products"
+import Products from "../Components/Products/Products"
 import Discountsubs from "../Components/Discountsubs"
 import Footer from "../Components/Footer"
 const Container=styled.div`

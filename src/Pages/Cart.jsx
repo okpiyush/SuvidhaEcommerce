@@ -142,25 +142,24 @@ const SummaryType=styled.div`
 
 
 const Cart = () => {
-    const {loginData}=useContext(LoginContext);
-    const [cart,setCart]=useState(null);
-    const [productQuantity, setProductQuantity] = useState();
+    const {loginData,cart,setCart}=useContext(LoginContext);
     const [Delivery,setDelivery]=useState(100);
     const [totalPrice,setTotalPrice]=useState(0);
 
 
     useEffect(() => {
         const makeRequest = async () => {
-            if (loginData && loginData.accessToken) { // Add null check here
-                const headers = {
+            if (loginData && loginData.accessToken) {
+                 // Add null check here
+                 const headers = {
                   token: `Bearer ${loginData.accessToken}`,
                 };
           
             try {
+            console.log(headers.token);
               const response = await axios.get(`http://localhost:5001/api/cart/find/${loginData._id}`, { headers });
               console.log(response.data.products)
               setCart(response.data.products)
-              console.log(cart);
             } catch (error) {
               console.error(error);
             }
@@ -168,9 +167,6 @@ const Cart = () => {
         }
         makeRequest();
     }, [loginData]);
-    useEffect(()=>{
-
-    },[totalPrice])
 
     //we will now be fetching specific products and making it an array so as to use it in for calculation of total price 
      
@@ -179,7 +175,7 @@ const Cart = () => {
     const updateQuantity = (productId, newQuantity,price) => {
         // Update the quantity of the product in the cart
         const updatedCart = cart.map((item) => {
-          if (item.productId === productId && newQuantity!=0) {
+          if (item.productId === productId && newQuantity!==0) {
             if(newQuantity>item.quantity){
                 let val=totalPrice+price
                 setTotalPrice(val);
@@ -189,16 +185,32 @@ const Cart = () => {
             }
             return { ...item, quantity: newQuantity };
           }
+          
           return item;
+
         });
         setCart(updatedCart);
-    
-        //updating the quantity in the backend
-
       };
       const setInitial=(price,quantity)=>{
         setTotalPrice(totalPrice+price*quantity);
+        
       }
+      //whenevr cart is updated it will show us its info 
+      useEffect(() => {
+        const updateCart = async () => {
+          try {
+            const headers={
+                token:`Bearer ${loginData.accessToken}`
+            }
+            const response = await axios.get(`http://localhost:5001/api/cart/find`,{headers} ); // Replace with your API endpoint
+            console.log(response.data); //Log the response data
+          } catch (error) {
+            console.error(error);
+          }
+        };
+    
+        updateCart(); // Call the updateCart function when the component mounts
+      }, [cart]);
   return (
     <Container>
     {
@@ -224,9 +236,18 @@ const Cart = () => {
             <Bottom>
                 {/*the products itself*/}
                 <Info>
-                    {cart.map((item,key)=>{
+                    {
+                        cart.length!==0?
+                        cart.map((item,key)=>{
                         return <CartProduct product={item} key={key} updateQuantity={updateQuantity} updateTotal={setInitial}  />
-                    })}
+                        })
+                        :
+                        (
+                            <center>
+                                No Items in your bag!
+                            </center>
+                        )
+                    }
                 </Info>
                 {/*summary and coupon code */}
                 <InfoTab>

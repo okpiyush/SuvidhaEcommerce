@@ -3,31 +3,33 @@ export const LoginContext = createContext();
 
 export const LoginContextProvider = ({ children }) => {
   const [loginData, setLoginData] = useState(null);
+  const [cart,setCart]=useState(null);
   useEffect(()=>{
   const sessionData = localStorage.getItem("suvikey");
-  if (sessionData !== null ||sessionData!==undefined &&loginData === null) {
+  if (sessionData !== null || sessionData!==undefined && loginData === null) {
     handleLogin(JSON.parse(sessionData));
   }
   },[]);
   const handleLogin = (userData) => {
     setLoginData(userData);
     localStorage.setItem("suvikey",JSON.stringify(userData));
-    console.log(userData);
   };
 
   const handleLogout = () => {
     setLoginData(null);
     localStorage.removeItem("suvikey");
-  
+    setCart(null);
   };
   const loginContextValue = useMemo(
     () => ({
       loginData,
       handleLogin,
       handleLogout,
+      cart,setCart
     }),
-    [loginData]
+    [loginData,cart]
   );
+
   return (
     <LoginContext.Provider value={loginContextValue}>
       {children}

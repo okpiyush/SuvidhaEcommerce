@@ -1,0 +1,96 @@
+
+.body{
+    width:99.7vw;
+    height:86vh;
+}
+.color{
+    background-color: red;
+}
+.col{
+    display: flex;
+    flex-direction: column;
+}
+
+.justify{
+    justify-content: space-around;
+}
+
+.width-99{
+    width:97%;
+}
+.padding-20{
+    padding:20px;
+}
+.row{
+    display: flex;
+    flex-direction:row;
+    padding-top: 5px;
+}
+
+.navbar{
+    flex:1;
+    height:60vw;
+}
+
+.flex-1{
+    flex:1;
+    margin:auto;
+}
+
+.text-center{
+    align-content: center;
+}
+
+.font-size{
+    font-size: 30px;
+}
+
+.title{
+    margin-top: 10px;
+    text-align: center;
+    color:purple
+}
+
+.phot{
+    border-radius: 20%;
+    height:400px;
+    width:400px;
+}
+
+.navbaro{
+    margin-top: 20px;
+    padding:20px;
+    height:25%;
+    width:80%;
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+}
+
+.content{
+    flex:3;
+    height:100%;
+    background-color:whitesmoke;
+}
+.OrderBox{
+    border-left: 5px solid green;
+    background-color: rgb(203, 203, 203);
+    padding-left: 20px;
+    font-weight:600;
+    box-shadow: inset 0 -3em 3em rgba(0, 0, 0, 0.1), 
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+}
+
+.productinOrder{
+    width:inherit;
+    /* background-color:antiquewhite; */
+    display :flex;
+}
+.cbutton{
+    width:100px;
+    height:30px;
+    margin-right:20px
+}

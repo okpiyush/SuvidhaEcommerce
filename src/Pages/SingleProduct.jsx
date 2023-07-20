@@ -1,10 +1,11 @@
 import styled from "styled-components"
-import Navbar from "../Components/Navbar"
-import Announcement from "../Components/Announcement/Announcement"
 import Discountsubs from "../Components/Discountsubs"
-import Footer from "../Components/Footer"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import useGetAxios from "../Hooks/useGetAxios"
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import Loading from "../Components/Loader/Loading";
 const Container = styled.div`
 
 `
@@ -14,13 +15,15 @@ const Wrapper = styled.div`
 `
 const ImgContainer = styled.div`
     flex:1;
-    padding:50px;    
+    display:flex;
+    justify-content:center
+
 `
 const Image = styled.img`
-     
+    
 `
 const InfoContainer = styled.div`
-     flex:1;
+     flex:2;
      padding:20px;
      display:flex;
      flex-direction:column;
@@ -33,7 +36,7 @@ const Title = styled.h1`
 `
 const Info = styled.p`
     margin-bottom:20px;
-    font-size:15px;   
+    font-size:20px;   
 `
 const Filter = styled.select`
 
@@ -150,71 +153,87 @@ const Reviewer=styled.div`
     font-weight:600;
 `
 const SingleProduct = () => {
-    let val=0;
+    const [num,setNum]=useState(0);
+    const {id}= useParams(); //use parameter hook
+    console.log(id);
+    const url =`http://localhost:5001/api/products/find/${id}`;
+    const data=useGetAxios(url);
+    console.log(data);
+    
+    
+    const handleIncrease=()=>{
+        if(num<100) setNum(num+1);
+    }
+    const handleDecrease=()=>{
+        if(num>0) setNum(num-1);
+    }
+
+
+    //add to cart functionality
+
     return (
     <Container>
-        <Wrapper>
-            <ImgContainer>
-                <Image src="https://www.aashirvaad.com/img/nsfo/Atta.png"/>
-            </ImgContainer>
-            <More>
-            <InfoContainer>
-                <Title>Aashirwad Atta</Title>
-                <Info>AASHIRVAAD Whole Wheat Atta is made from the grains which are heavy on the palm, golden amber in colour and hard in bite. It is carefully ground using modern 'chakki - grinding' process which ensures that AASHIRVAAD Atta contains 0% Maida and is 100% Sampoorna Atta.</Info>
-                <Price>Rs. 210</Price>
-                <FilterContainer>
-                
-                    <Filter>
-                        <FilterOption disabled selected>
-                            Weight
-                        </FilterOption>
-                        <FilterOption>
-                            1Kg
-                        </FilterOption>
-                        <FilterOption>
-                            5Kg
-                        </FilterOption>
-                        <FilterOption>
-                            10Kg
-                        </FilterOption>
-                        <FilterOption>
-                            20Kg
-                        </FilterOption>
-                    </Filter>
-                </FilterContainer>
-            </InfoContainer>
-            <AddContainer>
-                <Button>
-                -
-                </Button>
-                <Qty>{val}</Qty>
-                <Button>
-                    +
-                </Button>
+        {
+            !data?
+            (
+                <Loading/>
+            ):
+            (
+            <Wrapper>
+                <ImgContainer>
+                    <Image src={`${data.img}`}/>
+                </ImgContainer>
+                <More>
+                <InfoContainer>
+                    <Title>{data.title}</Title>
+                    <Info>{data.desc}</Info>
+                    <Price>₹{data.price}</Price>
+                    <FilterContainer>
 
-                <AddButton>
-                      <ShoppingBasketIcon color="66CC66"></ShoppingBasketIcon>  Buy Now
-                </AddButton>
-                <AddButton>
-                    <AddShoppingCartIcon></AddShoppingCartIcon>  Add Cart
-                </AddButton>
-            </AddContainer>
-            <ReviewContainer>
-                <RevTitle>Reviews</RevTitle>
-                <Reviews>
-                    <Review>
-                        <RevBody>Amazing Company and Low Price</RevBody>
-                        <Reviewer>-Kunal</Reviewer>
-                    </Review>
-                    <Review>
-                        <RevBody>Good Product</RevBody>
-                        <Reviewer>-Ravi</Reviewer>
-                    </Review>
-                </Reviews>
-            </ReviewContainer>
-            </More>
+                        <Filter>
+                            <FilterOption disabled selected>
+                                Weight
+                            </FilterOption>
+                            <FilterOption>
+                                {data.size}
+                            </FilterOption>
+                        </Filter>
+                    </FilterContainer>
+                </InfoContainer>
+                <AddContainer>
+                    <Button onClick={handleDecrease}>
+                    -
+                    </Button>
+                    <Qty>{num}</Qty>
+                    <Button onClick={handleIncrease}>
+                        +
+                    </Button>
+
+                    <AddButton>
+                          <ShoppingBasketIcon color="66CC66"></ShoppingBasketIcon>  Buy Now
+                    </AddButton>
+                    <AddButton>
+                        <AddShoppingCartIcon></AddShoppingCartIcon>  Add Cart
+                    </AddButton>
+                </AddContainer>
+                <ReviewContainer>
+                    <RevTitle>Reviews</RevTitle>
+                    <Reviews>
+                        <Review>
+                            <RevBody>Amazing Company and Low Price</RevBody>
+                            <Reviewer>-Kunal</Reviewer>
+                        </Review>
+                        <Review>
+                            <RevBody>Good Product</RevBody>
+                            <Reviewer>-Ravi</Reviewer>
+                        </Review>
+                    </Reviews>
+                </ReviewContainer>
+                </More>
             
         </Wrapper>
+            )
+        }
         <Discountsubs/>
     </Container>
   )

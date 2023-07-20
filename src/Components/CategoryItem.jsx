@@ -26,7 +26,7 @@ const Info=styled.div`
     top:0;
     left:0;
     width:100%;
-    height:100px;
+    height:200px;
     display:flex;
     align-items:center;
     justify-content:center;

@@ -5,7 +5,7 @@ const sliderItems=[
         title:"Upto 30% Off",
         desc:" Buy your favourite fresh fruits and Vegetables and get upto 30% off",
         color:"#badfe7",
-
+        link:"/products"
     },
     {
         id:2,
@@ -13,6 +13,7 @@ const sliderItems=[
         title:"Packaged Food Items",
         desc:"Special Discounts on any packaged food item over rs. 500 and get 10% off",
         color:"#c2edce",
+        link:"/products"
     },
     {
         id:3,
@@ -20,6 +21,7 @@ const sliderItems=[
         title:"Fresh Dairy products Available",
         desc:"Get dairy products of your favourite kind. Fresh and local on your doorstep",
         color:"#f6f6f2",
+        link:"/products"
     }
     ,
     {
@@ -28,6 +30,7 @@ const sliderItems=[
         title:"Free Delivery",
         desc:"Shop over Rs 1000 and get Free Delivery", 
         color:"#fafafb",
+        link:"/products"
     }
 
 ];
@@ -86,7 +89,7 @@ const popularProducts =[
     },
     {
         id:3,
-        img:"https://www.fortunefoods.com/sites/default/files/1.4.png",
+        img:"https://www.fortunefoods.com/wp-content/uploads/2022/12/01_0020_Biryani-Classic-1Kg-01-FOP_2.png",
     },
     {
         id:4,

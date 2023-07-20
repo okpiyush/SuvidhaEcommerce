@@ -1,7 +1,7 @@
 import CategoryItem from "./CategoryItem"
 import styled from "styled-components"
-import {categories }from "../data.js"
-
+import {useState} from "react";
+import { categories } from "../data";
 const Container = styled.div`
     display :flex;
     padding:20px;
@@ -20,12 +20,14 @@ const Wrapper = styled.div`
     
 `
 const Categories = () => {
+  const [category,setCategories]=useState(categories);
+
   return (
     <Wrapper>
     <Title>Categories</Title>
     <Container>
         
-        {categories.map((item)=>(
+        {category.map((item)=>(
             <CategoryItem item={item}/>
         ))}
     </Container>

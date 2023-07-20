@@ -74,8 +74,18 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate=useNavigate();
-
-
+    const handleUserChange=(e)=>{
+    setUsername(e.target.value);
+  }
+  const handlePasswordChange=(e)=>{
+    setPassword(e.target.value);
+  }
+  const checkUser=()=>{
+    if(loginData){
+      navigate("/home",{replace:true});
+    }
+  }
+  
     const handleSubmit = async (e) => {
       e.preventDefault();
       if(username===""||password===""){
@@ -96,21 +106,10 @@ const Login = () => {
         navigate("/home", { replace: true });
         checkUser();
       }catch(err){
-        console.log(err);
+        alert(err.response.data);
       }
     };
 
-  const handleUserChange=(e)=>{
-    setUsername(e.target.value);
-  }
-  const handlePasswordChange=(e)=>{
-    setPassword(e.target.value);
-  }
-  const checkUser=()=>{
-    if(loginData){
-      navigate("/home",{replace:true});
-    }
-  }
   
   return (
     <Container>
