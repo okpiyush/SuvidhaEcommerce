@@ -1,137 +1,195 @@
-import axios from 'axios'
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import styled from 'styled-components'
-import Loading from '../Loader/Loading'
-const Product = styled.div`
-padding:5px;
-display:flex;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
-margin-bottom:10px; 
-border-radius:10px;
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Add, Remove } from '@mui/icons-material';
+import Loading from '../Loader/Loading';
+import { API_BASE_URL } from '../../config';
 
- `
-const ProductDetail = styled.div`
-   display:flex;
-   flex:2;
-   `
-const Image = styled.img`
-height:200px;
-width:200px;
-flex:1;
-`
-const Details = styled.div`
-flex:2;
-margin-left:40px;
-font-size:20px;
-display:flex; 
-flex-direction:column;
-justify-content:space-around;
-padding:10px;
-`
-const ProductName = styled.span`
-`
-const ProductId = styled.span``
-const ProductWeight = styled.span``
-const PriceDetail=styled.div`
-flex:1;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:space-around;
+const ItemContainer = styled.div`
+  padding: 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+`;
 
-`
+const MainContent = styled.div`
+  display: flex;
+  gap: 24px;
+`;
 
-const TypeContainer=styled.div`
-display:flex;
+const ImageWrapper = styled.div`
+  width: 112px;
+  height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-align-items:center;
-justify-content:center;
-`
-const Button=styled.button`
-    font-size:30px;
-    width:30px;
-    height:30px;
-    display:flex;
-    border:1px solid lightgrey;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background-color:white;
-    margin:10px;
-    cursor:pointer;
-    
-`
-const Qty=styled.input`
-    font-size:25px;
-    width:35px;
-    height:30px;
-    display:flex;
-    border:2px solid teal;
-    border-radius:15%;
-    align-items:center;
-    justify-content:center;
-`
-const Price= styled.span`
-font-size :30px;
-font-weight:600;
-`
-const CartProduct = (props) => {
-const [product, setProduct] = useState(null);
-const [loading, setLoading] = useState(true);
-const [Delivery,setDelivery]=useState(100);
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const InfoWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Title = styled.div`
+  font-size: 16px;
+  color: #212121;
+  cursor: pointer;
+  &:hover {
+    color: #2874f0;
+  }
+`;
+
+const SubText = styled.div`
+  font-size: 14px;
+  color: #878787;
+`;
+
+const PriceWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+`;
+
+const Price = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+`;
+
+const ActionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 24px;
+`;
+
+const QtyControl = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const QtyButton = styled.button`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: #2874f0;
+    color: #2874f0;
+  }
+`;
+
+const QtyDisplay = styled.div`
+  width: 46px;
+  height: 28px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
+const TextAction = styled.button`
+  background: none;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #212121;
+
+  &:hover {
+    color: #2874f0;
+  }
+`;
+
+const CartProduct = ({ product: cartItem, updateQuantity, removeProduct }) => {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const makeRequest = async () => {
+    const fetchProduct = async () => {
       try {
-        const productInfo = await axios.get(`https://businessmanagementsolutionapi.onrender.com/api/products/find/${props.product.productId}`);
-        setProduct(productInfo.data);
-        setLoading(false); // Set loading to false after data is fetched
+        const res = await axios.get(`${API_BASE_URL}/products/find/${cartItem.productId}`);
+        setProduct(res.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
-    
-    makeRequest();
-  }, [props.product]);
-  
-  const handleQuantityChange = (newQuantity) => {
-    props.updateQuantity(props.product.productId, newQuantity,product.price);
-  };
-  if (loading) {
-    return <Loading/>;
-  }
-    return (
-    <Product>
-        <ProductDetail>
-            <Image src={product.img}/>
-            <Details>
-                <ProductName>
-                    <b>Product :</b> {product.title}
-                </ProductName>
-                <ProductId>
-                    <b>ID :</b>
-                    <span>{product._id}</span>
-                </ProductId>
-                <ProductWeight>
-                    <b>Weight </b>: {product.size}
-                </ProductWeight>
-            </Details>
-        </ProductDetail>
-        <PriceDetail>
-                <TypeContainer>
-                    <Button onClick={() => handleQuantityChange(props.product.quantity - 1)}>
-                    -
-                    </Button>
-                    <Qty max="99" min="1" placeholder={props.product.quantity} disabled/>
-                    <Button onClick={() => handleQuantityChange(props.product.quantity + 1)}>
-                        +
-                    </Button>
-                </TypeContainer>
-                <Price><b>Price :</b>₹{product.price*props.product.quantity}</Price>
-        </PriceDetail>
-    </Product>
-  )
-}
+    fetchProduct();
+  }, [cartItem.productId]);
 
-export default CartProduct
+  if (loading) return null;
+
+  return (
+    <ItemContainer>
+      <MainContent>
+        <ImageWrapper>
+          <img src={product.img} alt={product.title} />
+        </ImageWrapper>
+        <InfoWrapper>
+          <Title>{product.title}</Title>
+          <SubText>Size: {product.size || 'Regular'}</SubText>
+          <SubText>Seller: Suvidha Retail</SubText>
+          <PriceWrapper>
+            <Price>₹{product.price * cartItem.quantity}</Price>
+            <span style={{ fontSize: '14px', color: '#388e3c', fontWeight: 600 }}>20% Off 1 applied</span>
+          </PriceWrapper>
+        </InfoWrapper>
+        <div style={{ fontSize: '14px', textAlign: 'right', width: '200px' }}>
+          Delivery by Tomorrow, Mon | <span style={{ color: '#388e3c' }}>Free</span>
+        </div>
+      </MainContent>
+
+      <ActionWrapper>
+        <QtyControl>
+          <QtyButton
+            disabled={cartItem.quantity <= 1}
+            onClick={() => updateQuantity(cartItem.productId, cartItem.quantity - 1)}
+          >
+            <Remove fontSize="small" />
+          </QtyButton>
+          <QtyDisplay>{cartItem.quantity}</QtyDisplay>
+          <QtyButton onClick={() => updateQuantity(cartItem.productId, cartItem.quantity + 1)}>
+            <Add fontSize="small" />
+          </QtyButton>
+        </QtyControl>
+
+        <TextAction>Save for Later</TextAction>
+        <TextAction
+          style={{ color: '#ff4343' }}
+          onClick={() => removeProduct(cartItem.productId)}
+        >
+          Remove
+        </TextAction>
+      </ActionWrapper>
+    </ItemContainer>
+  );
+};
+
+export default CartProduct;

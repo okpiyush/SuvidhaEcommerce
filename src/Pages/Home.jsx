@@ -1,17 +1,24 @@
-import React from 'react'
-import Slider from "../Components/Slider"
-import Categories from "../Components/Categories"
-import Products from '../Components/Products/Products'
-import Discountsubs from '../Components/Discountsubs'
+import React from 'react';
+import styled from 'styled-components';
+import Slider from "../Components/Slider";
+import Categories from "../Components/Categories";
+import Products from '../Components/Products/Products';
+import Discountsubs from '../Components/Discountsubs';
+
+const Container = styled.div`
+  background-color: #f1f3f6;
+  min-height: 100vh;
+`;
+
 const Home = () => {
   return (
-    <div>
-      <Slider></Slider>
+    <Container>
+      <Slider />
       <Categories />
       <Products />
-      <Discountsubs/>
-    </div>
-  )
-}
+      <Discountsubs />
+    </Container>
+  );
+};
 
-export default Home
+export default Home;

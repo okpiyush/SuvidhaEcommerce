@@ -1,33 +1,55 @@
-import React, { createContext, useEffect, useState,useMemo } from 'react';
+import React, { createContext, useEffect, useState, useMemo, useCallback } from 'react';
+import axios from 'axios';
+import { API_BASE_URL } from '../config';
+
 export const LoginContext = createContext();
 
 export const LoginContextProvider = ({ children }) => {
   const [loginData, setLoginData] = useState(null);
-  const [cart,setCart]=useState(null);
-  useEffect(()=>{
-  const sessionData = localStorage.getItem("suvikey");
-  if (sessionData !== null || sessionData!==undefined && loginData === null) {
-    handleLogin(JSON.parse(sessionData));
-  }
-  },[]);
+  const [cart, setCart] = useState([]);
+
+  const fetchCart = useCallback(async (token, userId) => {
+    if (!token || !userId) return;
+    try {
+      const headers = { token: `Bearer ${token}` };
+      const response = await axios.get(`${API_BASE_URL}/cart/find/${userId}`, { headers });
+      setCart(response.data.products || []);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const sessionData = localStorage.getItem("suvikey");
+    if (sessionData) {
+      const parsedData = JSON.parse(sessionData);
+      setLoginData(parsedData);
+      fetchCart(parsedData.accessToken, parsedData._id);
+    }
+  }, [fetchCart]);
+
   const handleLogin = (userData) => {
     setLoginData(userData);
-    localStorage.setItem("suvikey",JSON.stringify(userData));
+    localStorage.setItem("suvikey", JSON.stringify(userData));
+    fetchCart(userData.accessToken, userData._id);
   };
 
   const handleLogout = () => {
     setLoginData(null);
     localStorage.removeItem("suvikey");
-    setCart(null);
+    setCart([]);
   };
+
   const loginContextValue = useMemo(
     () => ({
       loginData,
       handleLogin,
       handleLogout,
-      cart,setCart
+      cart,
+      setCart,
+      fetchCart: () => fetchCart(loginData?.accessToken, loginData?._id)
     }),
-    [loginData,cart]
+    [loginData, cart, fetchCart]
   );
 
   return (

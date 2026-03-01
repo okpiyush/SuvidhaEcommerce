@@ -1,54 +1,74 @@
-import {useState,React} from 'react'
-import { popularProducts } from '../../data';
-import Product from './Product'
+import React from 'react';
+import Product from './Product';
 import styled from 'styled-components';
-import useGetAxios from "../../Hooks/useGetAxios"
-import { useEffect } from 'react';
+import useGetAxios from "../../Hooks/useGetAxios";
 import Loading from '../Loader/Loading';
-const Container = styled.div`
-  display:flex;
-  padding:30px 30px 0px 30px;
-  margin:20px;
-  flex-wrap:wrap;
-  justify-content:space-around;
-`
-const Title = styled.h1`
-`
-const Wrapper = styled.div`
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin-top:30px;
-    justify-content:space-around;
-    
-`
+import { API_BASE_URL } from "../../config";
 
-const Products = () => {
-  const url="https://businessmanagementsolutionapi.onrender.com/api/products/?featured=true"
-  const getData=useGetAxios(url);
-  const products = !getData?null:getData;
-  
+const Wrapper = styled.div`
+  max-width: 1248px;
+  margin: 40px auto;
+  padding: 0 16px;
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  color: #212121;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -8px;
+`;
+
+const Products = ({ cat, search }) => {
+  let url = `${API_BASE_URL}/products/`;
+  let title = "Featured Products";
+
+  if (cat) {
+    url = `${API_BASE_URL}/products/?category=${cat}`;
+    title = `Products in ${cat}`;
+  } else if (search) {
+    url = `${API_BASE_URL}/products?q=${search}`;
+    title = `Search Results for "${search}"`;
+  } else {
+    url = `${API_BASE_URL}/products/?featured=true`;
+    title = "Featured Products";
+  }
+
+  const products = useGetAxios(url);
 
   return (
-
     <Wrapper>
-      <Title>Popular Products</Title>
+      <Header>
+        <Title>{title}</Title>
+      </Header>
       <Container>
-      {
-        !products?
-        (<Loading/>)
-        :
-        (
-          products.map(
-          (item,key)=>(
-            <Product item={item} post={false} key={key}/>
-          )
-        )
-        )
-      }
-    </Container>
+        {!products ? (
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center', padding: '50px' }}>
+            <Loading />
+          </div>
+        ) : products.length === 0 ? (
+          <div style={{ width: '100%', padding: '50px', textAlign: 'center', color: '#878787' }}>
+            No products found matches your criteria.
+          </div>
+        ) : (
+          products.map((item) => (
+            <Product item={item} key={item._id} />
+          ))
+        )}
+      </Container>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

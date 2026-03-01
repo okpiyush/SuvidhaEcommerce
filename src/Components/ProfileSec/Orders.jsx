@@ -1,48 +1,82 @@
-import React,{useContext, useEffect, useState} from 'react'
-import useGetAuth from '../../Hooks/useGetAuth';
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { LoginContext } from '../../Contexts/LoginContext';
 import Loading from '../Loader/Loading';
 import Order from './Order';
+import axios from 'axios';
+import { API_BASE_URL } from '../../config';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #212121;
+`;
+
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: #878787;
+  text-align: center;
+  gap: 12px;
+
+  h3 { color: #212121; font-size: 18px; margin: 0; }
+`;
+
+const OrdersList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const Orders = () => {
-  const [order,setOrder]=useState(null);
-  const [loading,setLoading]=useState(true);
-  const {loginData}=useContext(LoginContext);
-  const url=`https://businessmanagementsolutionapi.onrender.com/api/order/find/${loginData._id}`
-  console.log(loginData.accessToken);
-  const orders=useGetAuth(url,loginData.accessToken);
+  const [ordersData, setOrdersData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { loginData } = useContext(LoginContext);
+
   useEffect(() => {
-    setOrder(orders);
-    setLoading(false);
-  }, [orders]);
-  return (
-    <div>
-        <h1 className="title">My Orders</h1>
-        {loading?
-
-        <Loading/>
-        :
-        <div>
-          {
-            !order&&
-            <div>
-            No Orders yet....
-            </div>
-          }
-          {
-            order&&
-            <div>
-             {
-              order.map((item)=>{
-                  return (<Order item={item} key={item._id}/>)
-              })
-              }
-            </div>
-          }
-        </div>
+    const fetchOrders = async () => {
+      if (loginData?._id) {
+        try {
+          const headers = { token: `Bearer ${loginData.accessToken}` };
+          const res = await axios.get(`${API_BASE_URL}/order/find/${loginData._id}`, { headers });
+          setOrdersData(res.data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
         }
-    </div>
-  )
-}
+      }
+    };
+    fetchOrders();
+  }, [loginData]);
 
-export default Orders
+  if (loading) return <Loading />;
+
+  return (
+    <Container>
+      <Title>My Orders</Title>
+      {ordersData.length === 0 ? (
+        <EmptyState>
+          <h3>No Orders found</h3>
+          <p>It looks like you haven't placed any orders yet.</p>
+        </EmptyState>
+      ) : (
+        <OrdersList>
+          {ordersData.map((item) => (
+            <Order item={item} key={item._id} />
+          ))}
+        </OrdersList>
+      )}
+    </Container>
+  );
+};
+
+export default Orders;

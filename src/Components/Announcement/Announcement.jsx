@@ -6,34 +6,37 @@ import axios from 'axios'
 import Loading from "../Loader/Loading"
 import useGetAxios from "../../Hooks/useGetAxios"
 const Container = styled.div`
-    height:30px;
-    background-color:black;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:500;
-    font-size:16px;
+    height: 34px;
+    background-color: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.1);
 `
 
 
-const Announcement= () => {
-  const url = "https://businessmanagementsolutionapi.onrender.com/api/announcement/";
+const Announcement = () => {
+  const url = "http://localhost:5005/api/announcement/";
   const temp = useGetAxios(url);
   //checking so that temp.data is not null
-  const announcements = !temp?null:temp.data;
+  const announcements = !temp ? null : temp.data;
 
   return (
     <Container>
       <div id="scroll-container">
         <div id="scroll-text">
-        {!announcements?
-        (<Loading />):
-        (
-          announcements.map((item, key) => (
-          <div id="inner" key={key}>{item}</div>
-          ))
-        )}
+          {!announcements ?
+            (<Loading />) :
+            (
+              announcements.map((item, key) => (
+                <div id="inner" key={key}>{item}</div>
+              ))
+            )}
         </div>
       </div>
     </Container>

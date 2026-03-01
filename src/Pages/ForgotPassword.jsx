@@ -70,7 +70,7 @@ const ForgotPassword = () => {
             const payload={
                 "email":e.target.email.value
             }
-            const url="https://businessmanagementsolutionapi.onrender.com/api/auth/forgotpassword"
+            const url="http://localhost:5005/api/auth/forgotpassword"
             try{
                 const res=await axios.post(url,payload);
                 setEmail(e.target.email.value);
@@ -95,7 +95,7 @@ const ForgotPassword = () => {
             email:email,
             otp:e.target.otp.value
         }
-        const url="https://businessmanagementsolutionapi.onrender.com/api/auth/setotp"
+        const url="http://localhost:5005/api/auth/setotp"
         try{
             const res=await axios.post(url,payload);
             alert("Check your email for the new password")

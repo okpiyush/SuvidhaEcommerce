@@ -1,54 +1,87 @@
-import React,{useContext, useState} from 'react'
+import React, { useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { LoginContext } from '../../Contexts/LoginContext';
 import axios from 'axios';
-import { useEffect } from 'react';
-import CustomProduct from '../Products/CustomProduct';
 import Loading from '../Loader/Loading';
+import { API_BASE_URL } from '../../config';
+import Product from '../Products/Product';
+import { FavoriteBorder } from '@mui/icons-material';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #212121;
+`;
+
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: #878787;
+  text-align: center;
+  gap: 12px;
+
+  h3 { color: #212121; font-size: 18px; margin: 0; }
+`;
+
+const WishlistGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+`;
 
 const Wishlist = () => {
-  const [wishlist,setWishList]=useState(null);
-  const [loading,setLoading]=useState(true);
-  const{loginData}=useContext(LoginContext);
-  const url="https://businessmanagementsolutionapi.onrender.com/api/wishlist/get";
-  const headers={
-    "token":`Bearer ${loginData.accessToken}`
-  }
-  const wishdata={
-    "wishlist":loginData.wishlist
-  }
-  console.log(wishdata);
-  
-  useEffect(()=>{
-    const setWishes= async()=>{
-      const getwishes= axios.post(url,wishdata,{headers}).then(response=>{
-        setWishList(response.data);
+  const [wishlistData, setWishlistData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { loginData } = useContext(LoginContext);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (loginData?.wishlist?.length > 0) {
+        try {
+          const headers = { token: `Bearer ${loginData.accessToken}` };
+          const res = await axios.post(`${API_BASE_URL}/products/getcustom`, { getproduct: loginData.wishlist }, { headers });
+          setWishlistData(res.data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
         setLoading(false);
-      }) 
-      console.log(wishlist);
-    }
-    setWishes();
-  },[loginData.wishlist]);
+      }
+    };
+    fetchWishlist();
+  }, [loginData]);
+
+  if (loading) return <Loading />;
+
   return (
-    <div className='col text-center'>
-    
-        <h1 className="title">My Wishlist</h1>
-        <div>
-        {/* if Wishlist is null */}
-          {loading ?
-          <Loading/>
-          :
-          !wishlist || wishlist==="None"?
-          <div>
-            Wishlist Empty
-          </div>
-          :
-          <CustomProduct products={wishlist}/>
+    <Container>
+      <Title>My Wishlist ({wishlistData.length})</Title>
+      {wishlistData.length === 0 ? (
+        <EmptyState>
+          <FavoriteBorder sx={{ fontSize: 60, opacity: 0.2 }} />
+          <h3>Your Wishlist is Empty</h3>
+          <p>Save items that you like in your wishlist to review them later.</p>
+        </EmptyState>
+      ) : (
+        <WishlistGrid>
+          {wishlistData.map((item) => (
+            <Product item={item} key={item._id} />
+          ))}
+        </WishlistGrid>
+      )}
+    </Container>
+  );
+};
 
-          }
-          
-        </div>
-    </div>
-  )
-}
-
-export default Wishlist
+export default Wishlist;
