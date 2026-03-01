@@ -4,6 +4,7 @@ import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import { useEffect, useState } from "react";
 import Loading from "./Loader/Loading";
+import { API_BASE_URL } from "../config";
 
 const Wrapper = styled.div`
   background-color:#fcf5f5;
@@ -50,28 +51,27 @@ const Button = styled.button`
 
 const Discountsubs = () => {
   const [Mail, setMailstate] = useState();
-    const [eLoading,setLoading]=useState(false);
-    const handleChange=(e)=>{
-        setMailstate(e.target.value);
-        setLoading(false);
-        console.log(Mail)
-    }
+  const [eLoading, setLoading] = useState(false);
+  const handleChange = (e) => {
+    setMailstate(e.target.value);
+    setLoading(false);
+    console.log(Mail)
+  }
   const makeRequest = async () => {
     console.log("I made a request");
     try {
+      if (Mail === undefined) return;
+      setLoading(true);
+      const response = await axios.post(`${API_BASE_URL}/mail/`, {
+        "email": Mail
+      });
 
-        console.log(Mail);
-        if(Mail===undefined)return
-        setLoading(true);
-      const response = await axios.post(`http://localhost:5005/api/mail/`,{
-        "email":Mail
-      },
-      );
-      
       console.log(response.data.reso);
       setMailstate(response.data.reso);
-    }catch (err) {
+    } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,9 +93,9 @@ const Discountsubs = () => {
       </InputContainer>
       {Mail === undefined ? (
         <div>Subscribe to our services for free</div>
-      ) : !eLoading ? (
-        <Loading/>
-      ) :( Mail === "done")? (
+      ) : eLoading ? (
+        <Loading />
+      ) : (Mail === "done") ? (
         <div>Already subscribed to our services</div>
       ) : (
         <div>{Mail} has been added to our services</div>

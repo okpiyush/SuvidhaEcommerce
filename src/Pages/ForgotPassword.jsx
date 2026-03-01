@@ -1,7 +1,8 @@
-import axios from 'axios'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { API_BASE_URL } from "../config";
 
 const Container = styled.div`
     background:url("https://png.pngtree.com/background/20220722/original/pngtree-photo-of-shelf-commodity-supermarket-picture-image_1711939.jpg");
@@ -59,85 +60,85 @@ const Button = styled.button`
 `
 
 const ForgotPassword = () => {
-    const [stat,setStat]=useState(1);
-    const [email,setEmail]=useState();
-    const nav= useNavigate();
-    const okay=async (e)=>{
+    const [stat, setStat] = useState(1);
+    const [email, setEmail] = useState();
+    const nav = useNavigate();
+    const okay = async (e) => {
         e.preventDefault();
-        const regex="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+        const regex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
-        if(e.target.email.value.match(regex)){
-            const payload={
-                "email":e.target.email.value
+        if (e.target.email.value.match(regex)) {
+            const payload = {
+                "email": e.target.email.value
             }
-            const url="http://localhost:5005/api/auth/forgotpassword"
-            try{
-                const res=await axios.post(url,payload);
+            const url = `${API_BASE_URL}/auth/forgotpassword`
+            try {
+                const res = await axios.post(url, payload);
                 setEmail(e.target.email.value);
                 console.log(email);
                 setStat(2);
-            }catch(err){
-                if(err.response.status===409){
+            } catch (err) {
+                if (err.response.status === 409) {
                     setStat(2);
-                }else{
+                } else {
                     alert(err.response.data);
                 }
             }
-            e.target.email.value="";
-        }else{
+            e.target.email.value = "";
+        } else {
             console.log("Not Valid Email");
         }
-        
+
     }
-    const notOkay=async (e)=>{
+    const notOkay = async (e) => {
         e.preventDefault();
-        const payload={
-            email:email,
-            otp:e.target.otp.value
+        const payload = {
+            email: email,
+            otp: e.target.otp.value
         }
-        const url="http://localhost:5005/api/auth/setotp"
-        try{
-            const res=await axios.post(url,payload);
+        const url = `${API_BASE_URL}/auth/setotp`
+        try {
+            const res = await axios.post(url, payload);
             alert("Check your email for the new password")
             nav("/login");
-        }catch(err){
-            if(err.response.status===429 || err.response.status===498){
+        } catch (err) {
+            if (err.response.status === 429 || err.response.status === 498) {
                 alert(`${err.response.data} \n Try again later`);
                 window.location.reload();
-            }else{
+            } else {
                 alert(err.response.data);
-                e.target.otp.value="";
+                e.target.otp.value = "";
             }
-            
+
 
         }
         return false;
     }
-    
+
     return (
-    <Container>
-        <Wrapper>
-            {stat===1?
-            <Form onSubmit={okay}>
-            <Title>
-                Forgot Password
-            </Title>
-                <Input name="email" placeholder="Email"/>
-                <Button>Search Acoount</Button>
-            </Form>
-            :
-            <Form onSubmit={notOkay}>
-            <Title>
-                OTP Submission
-            </Title>
-                <Input name="otp" placeholder="OTP"/>
-                <Button>Submit OTP</Button>
-            </Form>
-            }
-            
-        </Wrapper>
-    </Container>
-  )
+        <Container>
+            <Wrapper>
+                {stat === 1 ?
+                    <Form onSubmit={okay}>
+                        <Title>
+                            Forgot Password
+                        </Title>
+                        <Input name="email" placeholder="Email" />
+                        <Button>Search Acoount</Button>
+                    </Form>
+                    :
+                    <Form onSubmit={notOkay}>
+                        <Title>
+                            OTP Submission
+                        </Title>
+                        <Input name="otp" placeholder="OTP" />
+                        <Button>Submit OTP</Button>
+                    </Form>
+                }
+
+            </Wrapper>
+        </Container>
+    )
 }
 
 export default ForgotPassword

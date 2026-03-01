@@ -1,4 +1,4 @@
-import {useState,React, useContext} from 'react'
+import { useState, React, useContext } from 'react'
 import { popularProducts } from '../../data';
 import Product from './Product'
 import styled from 'styled-components';
@@ -36,7 +36,7 @@ const CustomProduct = (props) => {
     const headers = {
       token: `Bearer ${loginData.accessToken}`,
     };
-    const url = 'http://localhost:5005/api/wishlist/delete';
+    const url = `${API_BASE_URL}/wishlist/delete`;
     const response = await axios.patch(url, data, { headers });
     console.log(response);
 
@@ -52,7 +52,7 @@ const CustomProduct = (props) => {
       <Container>
         {!products ? (
           <Loading />
-        ) : products.length===0?<div>Wishlist Empty</div> : (
+        ) : products.length === 0 ? <div>Wishlist Empty</div> : (
           products.map((item, key) => (
             <Product
               item={item}

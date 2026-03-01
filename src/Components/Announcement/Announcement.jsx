@@ -1,10 +1,11 @@
-import styled from "styled-components"
-import "./announcement.css"
-import { useEffect } from "react"
-import { useState } from "react"
-import axios from 'axios'
-import Loading from "../Loader/Loading"
-import useGetAxios from "../../Hooks/useGetAxios"
+import styled from "styled-components";
+import "./announcement.css";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
+import Loading from "../Loader/Loading";
+import useGetAxios from "../../Hooks/useGetAxios";
+import { API_BASE_URL } from "../../config";
 const Container = styled.div`
     height: 34px;
     background-color: var(--accent);
@@ -21,7 +22,7 @@ const Container = styled.div`
 
 
 const Announcement = () => {
-  const url = "http://localhost:5005/api/announcement/";
+  const url = `${API_BASE_URL}/announcement/`;
   const temp = useGetAxios(url);
   //checking so that temp.data is not null
   const announcements = !temp ? null : temp.data;
